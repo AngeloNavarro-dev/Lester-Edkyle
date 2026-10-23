@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP — Lester & Edkyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#a9756c;--dark:#463735;--gold:#b9965b;--cream:#fff9f4;--muted:#786d69}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--dark);font-family:Montserrat,sans-serif;font-weight:300}
+.page{min-height:100vh;padding:55px 18px;background:linear-gradient(rgba(55,35,32,.28),rgba(55,35,32,.48)),url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=2200&q=85") center/cover fixed;display:flex;align-items:center;justify-content:center}
+.card{width:min(720px,100%);background:rgba(255,253,249,.96);padding:48px 42px;box-shadow:0 25px 80px rgba(30,15,10,.22);border:1px solid rgba(185,150,91,.25)}
+.top{text-align:center}.script{font-family:"Great Vibes",cursive;font-size:55px;color:var(--rose)}.eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);font-weight:600}.title{font-family:"Cormorant Garamond",serif;font-size:48px;font-weight:500;margin:5px 0 10px}.intro{color:var(--muted);line-height:1.8;font-size:13px;max-width:550px;margin:0 auto}.line{height:1px;background:rgba(169,117,108,.2);margin:30px 0}
+label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin:0 0 9px}input,textarea{width:100%;border:1px solid rgba(70,55,53,.18);background:#fff;padding:14px 15px;font:inherit;color:var(--dark);outline:none;border-radius:0}input:focus,textarea:focus{border-color:var(--rose)}.field{margin-bottom:23px}
+.choice-group{display:grid;gap:10px}.choice{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid rgba(70,55,53,.14);cursor:pointer;background:white}.choice input{width:auto}.choice span{font-size:13px}
+button{width:100%;padding:17px;border:0;background:var(--rose);color:#fff;font:600 11px Montserrat,sans-serif;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.25s}button:hover{background:#8f5e56}.note{text-align:center;font-size:11px;color:var(--muted);line-height:1.7;margin-top:18px}
+.success{display:none;text-align:center;padding:25px 5px}.success .check{font-size:55px;color:var(--gold)}.success h2{font:500 40px "Cormorant Garamond";margin:8px 0}.success p{color:var(--muted);line-height:1.8}
+.back{display:inline-block;margin-top:20px;color:var(--rose);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.status{margin-top:12px;font-size:13px}
+.spinner{display:none;margin-top:10px;border:3px solid #f3f3f3;border-top:3px solid var(--rose);border-radius:50%;width:22px;height:22px;animation:spin 1s linear infinite}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<main class="page">
+<section class="card">
+  <div class="top">
+    <div class="script">Lester &amp; Edkyle</div>
+    <div class="eyebrow">Kindly Respond</div>
+    <h1 class="title">Wedding RSVP</h1>
+    <p class="intro">We would be delighted to celebrate this special day with you. Please complete the form below to let us know if you can join us.</p>
+  </div>
+  <div class="line"></div>
+
+  <!-- RSVP Code Verification -->
+  <div id="codeCheck">
+    <label for="rsvp-code">Enter RSVP Code *</label>
+    <input id="rsvp-code" type="text" placeholder="Example: LNE123" required>
+    <button type="button" onclick="verifyCode()">Check Invitation</button>
+    <div class="spinner" id="spinner"></div>
+    <p id="status" class="status"></p>
+  </div>
+
+  <!-- RSVP Form (hidden until code verified) -->
+  <form id="rsvpForm" style="display:none">
+    <div class="field">
+      <label for="name">Guest Name *</label>
+      <input id="name" name="name" type="text" placeholder="Your full name" required>
+    </div>
+
+    <div class="field">
+      <label>Will you attend? *</label>
+      <div class="choice-group">
+        <label class="choice"><input type="radio" name="attendance" value="Yes, gladly!" required><span>Yes, gladly! I’ll be there.</span></label>
+        <label class="choice"><input type="radio" name="attendance" value="Sorry, I can't make it."><span>Sorry, I can't make it.</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="guests">Number of Guests *</label>
+      <input id="guests" name="guests" type="hidden" value="1">
+      <input type="text" value="1" disabled>
+    </div>
+
+    <div class="field">
+      <label for="rsvpMessage">Message for Lester &amp; Edkyle</label>
+      <textarea id="rsvpMessage" name="message" rows="4" placeholder="Leave a little message for the couple..."></textarea>
+    </div>
+
+    <button type="submit">Submit RSVP</button>
+    <div class="note">Thank you for being part of our special day. ♡</div>
+  </form>
+
+  <div class="success" id="success">
+    <div class="check">♡</div>
+    <div class="eyebrow">RSVP Received</div>
+    <h2>Thank You!</h2>
+    <p>We’re so happy to hear from you. Your response has been received.</p>
+    <a class="back" href="index.html">← Back to our wedding website</a>
+  </div>
+</section>
+</main>
+
+<script>
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxUDERKPQ0Sqin7MPnOdyxPt3LozhfaX9hHUqXxVwRl-2GgWaBmfbDA0bDkqEqi48PH/exec";
+
+const form = document.getElementById("rsvpForm");
+const success = document.getElementById("success");
+const statusMsg = document.getElementById("status");
+const codeCheck = document.getElementById("codeCheck");
+const checkBtn = document.querySelector("#codeCheck button");
+const spinner = document.getElementById("spinner");
+
+let validCodes = [];
+
+// ✅ Load codes from Google Sheet GuestList tab
+async function loadCodes() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL + "?action=getCodes");
+    const data = await res.json();
+    validCodes = data.codes || [];
+    checkBtn.disabled = false;
+  } catch (err) {
+    console.error("Error loading codes:", err);
+  }
+}
+
+checkBtn.disabled = true;
+loadCodes();
+
+// ✅ Verification flow with loading animation
+async function verifyCode() {
+  const code = document.getElementById("rsvp-code").value.trim().toUpperCase();
+  spinner.style.display = "inline-block";
+  statusMsg.textContent = "⏳ Checking your invitation...";
+  statusMsg.style.color = "var(--muted)";
+
+  if (validCodes.length === 0) {
+    await loadCodes();
+  }
+
+  setTimeout(async () => {
+    spinner.style.display = "none";
+
+    if (validCodes.includes(code)) {
+      statusMsg.style.color = "green";
+      statusMsg.textContent = "✅ Invitation verified! Please complete the RSVP form below.";
+      codeCheck.style.display = "none";
+      form.style.display = "block";
+
+      // Auto‑fill guest name and lock it
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL + "?action=getGuest&code=" + encodeURIComponent(code));
+        const data = await res.json();
+        if (data.name) {
+          const nameField = document.getElementById("name");
+          nameField.value = data.name;
+          nameField.readOnly = true;
+          nameField.style.backgroundColor = "#f0f0f0";
+        }
+      } catch (err) {
+        console.error("Error fetching guest name:", err);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      statusMsg.style.color = "red";
+      statusMsg.textContent = "❌ We could not find this RSVP code on our guest list.";
+    }
+  }, 1000);
+}
+
+// ✅ Form submission
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  // Collect only the fields you want
+  const data = {
+    name: document.getElementById("name").value,
+    attendance: form.querySelector('input[name="attendance"]:checked')?.value || "",
+    guests: document.getElementById("guests").value,
+    message: document.getElementById("rsvpMessage").value
+  };
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+  } catch (err) {
+    console.log("Submission endpoint error:", err);
+  }
+
+  form.style.display = "none";
+  success.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
